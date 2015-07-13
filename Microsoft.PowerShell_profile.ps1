@@ -1,10 +1,20 @@
 &{
+
+  write-host "PS $($PSVersionTable.PSVersion)" -foregroundcolor "DarkGreen" -backgroundcolor "DarkGray" -nonewline
+
+  write-host "  " -nonewline
+
   $vs = "${env:ProgramFiles(x86)}\Microsoft Visual Studio 12.0\Common7\IDE"
   $found = test-path($vs)
   if ($found) {
-    write-host "Visual Studio Available"
+    write-host "VS 2013" -foregroundcolor "DarkGreen"  -backgroundcolor "DarkGray" -nonewline
     $env:PATH += ";$vs"
   }
+  else {
+    write-host "VS n/a" -foregroundcolor "DarkRed"  -backgroundcolor "DarkGray" -nonewline
+  }
+ 
+  write-host
 
   function global:prompt()
   {
