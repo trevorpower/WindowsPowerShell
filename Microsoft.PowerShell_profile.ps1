@@ -1,31 +1,36 @@
 &{
 
-  write-host " PS $($PSVersionTable.PSVersion) " -foregroundcolor "Black" -backgroundcolor "DarkGreen" -nonewline
-
-  write-host " " -nonewline
-
   $vs = "${env:ProgramFiles(x86)}\Microsoft Visual Studio 12.0\Common7\IDE"
-  $found = test-path($vs)
-  if ($found) {
-    write-host " VS 2013 " -foregroundcolor "Black"  -backgroundcolor "DarkGreen" -nonewline
+  if (test-path($vs)) {
     $env:PATH += ";$vs"
   }
-  else {
-    write-host " VS n/a " -foregroundcolor "Black"  -backgroundcolor "DarkRed" -nonewline
+
+  function good($value) {
+    write-host " $value " -foregroundcolor "Black"  -backgroundcolor "DarkGreen" -nonewline
   }
 
-  write-host " " -nonewline
- 
-  if (Get-Command "nuget" -ErrorAction SilentlyContinue) { 
-    write-host " nuget " -foregroundcolor "Black"  -backgroundcolor "DarkGreen" -nonewline
+  function bad($value) {
+    write-host " $value " -foregroundcolor "Black"  -backgroundcolor "DarkRed" -nonewline    
   }
-  else {
-    write-host " nuget " -foregroundcolor "Black"  -backgroundcolor "DarkRed" -nonewline      
+
+  function sep() {
+      write-host " " -nonewline
   }
+
+  function printCommandStatus([System.Collections.ArrayList]$names) {
+
+    Get-Command $names -CommandType Application -ErrorAction Silent |
+        %{ $_.Name.Split(".")[0].ToLower() } |
+        %{ $names.remove($_); sep; good $_ }
+
+    $names | %{ sep; bad $_ }
+  }
+
+  good "PS $($PSVersionTable.PSVersion)"
+
+  printCommandStatus "tf", "git", "nuget", "npm", "choco" 
 
   write-host
-
-
 
   function global:prompt()
   {
@@ -46,5 +51,3 @@
     return "$dir$char ";
   }
 }
-
-set-alias installutil $env:windir\Microsoft.NET\Framework64\v4.0.30319\InstallUtil
