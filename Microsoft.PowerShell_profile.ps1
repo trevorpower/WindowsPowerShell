@@ -1,20 +1,31 @@
 &{
 
-  write-host "PS $($PSVersionTable.PSVersion)" -foregroundcolor "DarkGreen" -backgroundcolor "DarkGray" -nonewline
+  write-host " PS $($PSVersionTable.PSVersion) " -foregroundcolor "Black" -backgroundcolor "DarkGreen" -nonewline
 
-  write-host "  " -nonewline
+  write-host " " -nonewline
 
   $vs = "${env:ProgramFiles(x86)}\Microsoft Visual Studio 12.0\Common7\IDE"
   $found = test-path($vs)
   if ($found) {
-    write-host "VS 2013" -foregroundcolor "DarkGreen"  -backgroundcolor "DarkGray" -nonewline
+    write-host " VS 2013 " -foregroundcolor "Black"  -backgroundcolor "DarkGreen" -nonewline
     $env:PATH += ";$vs"
   }
   else {
-    write-host "VS n/a" -foregroundcolor "DarkRed"  -backgroundcolor "DarkGray" -nonewline
+    write-host " VS n/a " -foregroundcolor "Black"  -backgroundcolor "DarkRed" -nonewline
   }
+
+  write-host " " -nonewline
  
+  if (Get-Command "nuget" -ErrorAction SilentlyContinue) { 
+    write-host " nuget " -foregroundcolor "Black"  -backgroundcolor "DarkGreen" -nonewline
+  }
+  else {
+    write-host " nuget " -foregroundcolor "Black"  -backgroundcolor "DarkRed" -nonewline      
+  }
+
   write-host
+
+
 
   function global:prompt()
   {
@@ -36,3 +47,4 @@
   }
 }
 
+set-alias installutil $env:windir\Microsoft.NET\Framework64\v4.0.30319\InstallUtil
