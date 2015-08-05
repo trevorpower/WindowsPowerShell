@@ -28,7 +28,7 @@
 
   good "PS $($PSVersionTable.PSVersion)"
 
-  printCommandStatus "tf", "git", "nuget", "npm", "choco" 
+  printCommandStatus "tf", "git", "nuget", "npm", "choco", "conemuc" 
 
   write-host
 
@@ -49,5 +49,20 @@
     $char = @{$true='#';$false='>'}[$isAdmin]
 
     return "$dir$char ";
+  }
+
+  function global:dark()
+  {
+    conemuc /GUIMACRO palette 3 "<Monokai>" > $null
+  }
+
+  function global:light()
+  {
+    conemuc /GUIMACRO palette 3 "<Solarized Light>" > $null
+  }
+
+  function global:orange()
+  {
+    conemuc /GUIMACRO palette 3 "Orange" > $null
   }
 }
