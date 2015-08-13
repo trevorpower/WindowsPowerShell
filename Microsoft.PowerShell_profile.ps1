@@ -14,14 +14,14 @@
   }
 
   function sep() {
-      write-host " " -nonewline
+    write-host " " -nonewline
   }
 
   function printCommandStatus([System.Collections.ArrayList]$names) {
 
     Get-Command $names -CommandType Application -ErrorAction Silent |
-        %{ $_.Name.Split(".")[0].ToLower() } |
-        %{ $names.remove($_); sep; good $_ }
+    %{ $_.Name.Split(".")[0].ToLower() } |
+    %{ $names.remove($_); sep; good $_ }
 
     $names | %{ sep; bad $_ }
   }
@@ -46,9 +46,21 @@
       $dir = Split-Path $location -Leaf
     }
 
+    $branch = ''
+    $branchSeperator = ''
+    $gitRef = git symbolic-ref HEAD
+    if($gitRef -ne $NULL) {
+      $branchSeperator = ":"
+      $branch = $gitRef.substring($gitRef.LastIndexOf("/") + 1)
+    }
+
     $char = @{$true='#';$false='>'}[$isAdmin]
 
-    return "$dir$char ";
+    Write-Host $dir -nonewline -foregroundcolor Gray
+    Write-Host $branchSeperator -nonewline
+    Write-Host $branch -nonewline  -foregroundcolor DarkYellow
+    Write-Host $char -nonewline
+    " "
   }
 
   function global:dark()
