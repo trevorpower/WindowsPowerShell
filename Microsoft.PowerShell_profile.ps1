@@ -48,20 +48,9 @@
     Write-Host $char -nonewline
     " "
   }
-  function global:dark()
-  {
-    conemuc /GUIMACRO palette 3 "<Monokai>" > $null
-  }
-  function global:light()
-  {
-    conemuc /GUIMACRO palette 3 "<Solarized Light>" > $null
-  }
-  function global:orange()
-  {
-    conemuc /GUIMACRO palette 3 "Orange" > $null
-  }
 }
 
 Import-Module C:\tools\poshgit\dahlbyk-posh-git-fadc4dd\posh-git
 
+. "$PSScriptRoot\colors.ps1"
 . "$PSScriptRoot\commands.ps1"
