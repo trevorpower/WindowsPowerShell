@@ -19,3 +19,4 @@ Set-Alias ~ Reset-Directory
 Set-Alias .. Pop-Directory
 Set-Alias al Find-Aliases
 Set-Alias cull Stop-ProcessByName
+Set-Alias sync Sync-PSProfile
