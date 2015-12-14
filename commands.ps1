@@ -31,12 +31,6 @@ function global:Restart-Machine(){
    shutdown /r /t 00
 }
 
-function global:Switch-WindowOnTop()
-{
-   conemuc /GUIMACRO SetOption("AlwaysOnTop", 2)
-}
-
-
 Set-Alias ~ Reset-Directory
 Set-Alias .. Pop-Directory
 Set-Alias al Find-Aliases
@@ -44,4 +38,3 @@ Set-Alias cull Stop-ProcessByName
 Set-Alias sync Sync-PSProfile
 Set-Alias rdp Connect-Machine
 Set-Alias restart Restart-Machine
-Set-Alias front Switch-WindowOnTop

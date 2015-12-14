@@ -52,6 +52,8 @@
 
 Import-Module C:\tools\poshgit\dahlbyk-posh-git-fadc4dd\posh-git
 
-. "$PSScriptRoot\sync.ps1"
+Import-Module ConEmu
+Import-Module PSProfile
+
 . "$PSScriptRoot\colors.ps1"
 . "$PSScriptRoot\commands.ps1"
