@@ -13,4 +13,9 @@
    {
       conemuc /GUIMACRO palette 3 "Orange" > $null
    }
+   
+   function global:shane()
+  {
+    conemuc /GUIMACRO palette 3 "<Standard VGA>" > $null
+  }
 }
