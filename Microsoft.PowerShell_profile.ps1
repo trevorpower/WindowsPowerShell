@@ -21,7 +21,7 @@
   }
   good "PS $($PSVersionTable.PSVersion)"
   printCommandStatus "tf", "git", "nuget", "npm", "choco", "conemuc", "msbuild"
-  write-host
+  Write-Host
 
   function global:prompt()
   {
