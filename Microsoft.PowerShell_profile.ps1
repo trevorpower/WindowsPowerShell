@@ -57,3 +57,4 @@ Import-Module PSProfile
 
 . "$PSScriptRoot\colors.ps1"
 . "$PSScriptRoot\commands.ps1"
+. "$PSScriptRoot\custom_commands.ps1"

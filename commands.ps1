@@ -31,16 +31,9 @@ function global:Restart-Machine(){
    shutdown /r /t 00
 }
 
-function global:Set-LocationWebAppHome(){
-    Try
-    {
-        pushd $env:WEB_APP_HOME
-        gulp
-    }
-    Finally
-    {
-        popd
-    }
+function global:Reset-ConsoleWithPath(){
+    Clear-Host
+    Get-Location | %{ Write-Host -ForegroundColor "Cyan" $_.Path }
 }
 
 Set-Alias ~ Reset-Directory
@@ -50,4 +43,4 @@ Set-Alias cull Stop-ProcessByName
 Set-Alias sync Sync-PSProfile
 Set-Alias rdp Connect-Machine
 Set-Alias restart Restart-Machine
-Set-Alias kulp Set-LocationWebAppHome
+Set-Alias cc Reset-ConsoleWithPath
