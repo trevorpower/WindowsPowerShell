@@ -1,10 +1,7 @@
 [CmdletBinding()]
 param (
-    [Parameter(
-        Mandatory = $true,
-        Position = 0)]
+    [Parameter(Mandatory = $true, Position = 0)]
     $Pattern,
-
     [switch]$SimpleMatch
 )
 

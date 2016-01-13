@@ -1,0 +1,3 @@
+ [CmdletBinding()]
+ 
+ Set-Location ~

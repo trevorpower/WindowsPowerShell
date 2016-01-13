@@ -6,8 +6,16 @@ $env:path = $env:path + ";$profileDirectory"
 Set-Location $profileDirectory
 
 $env:path = $env:path + ";$profileDirectory\Scripts"
-$env:path = $env:path + ";$profileDirectory\Custom"
-
+$env:path = $env:path + ";$profileDirectory\Modules\Custom"
+$env:path = $env:path + ";C:\tools\ec2-api-tools-1.7.5.1\bin"
+. Commands
+. Colors
+Try {
+    . Custom-Commands
+} 
+Catch{
+  "No custom commands were loaded, moving on..."  
+}
 
 Set-LocationAlias scripts (Split-Path $profile)
 Set-LocationAlias desk ~\Desktop
@@ -66,7 +74,7 @@ Set-LocationAlias repos ~\Documents\Projects
   }
 }
 
-# Import-Module C:\tools\poshgit\dahlbyk-posh-git-fadc4dd\posh-git
+Import-Module C:\tools\poshgit\dahlbyk-posh-git-fadc4dd\posh-git
 
 Import-Module ConEmu
 Import-Module PSProfile

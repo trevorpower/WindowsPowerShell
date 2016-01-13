@@ -1,15 +1,3 @@
-function global:Pop-Directory(){
-   Set-Location ..
-}
-
-function global:Reset-Directory(){
-   Set-Location ~
-}
-
-function global:Find-Aliases($definition){
-   Get-Alias -Definition *$definition*
-}
-
 function global:Stop-ProcessByName($name){
    Stop-Process -Name $name
 }
