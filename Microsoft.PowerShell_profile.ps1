@@ -1,3 +1,12 @@
+Import-Module C:\tools\poshgit\dahlbyk-posh-git-fadc4dd\posh-git
+
+Import-Module ConEmu
+Import-Module PSProfile
+Import-Module SublimeText
+
+. "$PSScriptRoot\colors.ps1"
+. "$PSScriptRoot\commands.ps1"
+
 &{
   $vs = "${env:ProgramFiles(x86)}\Microsoft Visual Studio 12.0\Common7\IDE"
   if (test-path($vs)) {
@@ -20,7 +29,7 @@
     $names | %{ sep; bad $_ }
   }
   good "PS $($PSVersionTable.PSVersion)"
-  printCommandStatus "tf", "git", "nuget", "npm", "choco", "conemuc", "msbuild"
+  printCommandStatus "tf", "git", "nuget", "npm", "choco", "conemuc", "msbuild", "subl"
   Write-Host
 
   function global:prompt()
@@ -50,10 +59,3 @@
   }
 }
 
-Import-Module C:\tools\poshgit\dahlbyk-posh-git-fadc4dd\posh-git
-
-Import-Module ConEmu
-Import-Module PSProfile
-
-. "$PSScriptRoot\colors.ps1"
-. "$PSScriptRoot\commands.ps1"
