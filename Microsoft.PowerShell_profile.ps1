@@ -73,7 +73,8 @@ Import-Module ConEmu
 Import-Module PSProfile
 Import-Module Custom
 Import-Module EC2
-
+Import-Module GitHelper
+Import-Module Gulp
 
 dark
 

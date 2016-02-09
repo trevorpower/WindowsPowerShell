@@ -24,6 +24,10 @@ function global:Reset-ConsoleWithPath(){
     Get-Location | %{ Write-Host -ForegroundColor "Cyan" $_.Path }
 }
 
+function global:Reset-Directory(){
+    cd ~
+}
+
 Set-Alias ~ Reset-Directory
 Set-Alias .. Pop-Directory
 Set-Alias al Find-Aliases
