@@ -1,7 +1,7 @@
 Import-Module C:\tools\poshgit\dahlbyk-posh-git-fadc4dd\posh-git
 
 Import-Module ConEmu
-Import-Module PSProfile
+Import-Module -force PSProfile
 Import-Module SublimeText
 
 . "$PSScriptRoot\colors.ps1"
