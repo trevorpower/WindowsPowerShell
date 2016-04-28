@@ -7,10 +7,24 @@ Import-Module SublimeText
 . "$PSScriptRoot\colors.ps1"
 . "$PSScriptRoot\commands.ps1"
 
+
 &{
-  $vs = "${env:ProgramFiles(x86)}\Microsoft Visual Studio 12.0\Common7\IDE"
+  $console = $host.UI.RawUI
+  $buffer = $console.BufferSize
+  $buffer.Width = 130
+  $buffer.Height = 2000
+  $console.BufferSize = $buffer
+}
+
+&{
+  $vs = "${env:ProgramFiles(x86)}\Microsoft Visual Studio 14.0\Common7\IDE"
   if (test-path($vs)) {
     $env:PATH += ";$vs"
+  }
+
+  $gitBin = "${env:ProgramFiles}\Git\bin\"
+  if (test-path($gitBin)) {
+    $env:PATH += ";$gitBin"
   }
 
   function good($value) {
@@ -29,7 +43,7 @@ Import-Module SublimeText
     $names | %{ sep; bad $_ }
   }
   good "PS $($PSVersionTable.PSVersion)"
-  printCommandStatus "tf", "git", "nuget", "npm", "choco", "conemuc", "msbuild", "subl"
+  printCommandStatus "tf", "git", "nuget", "npm", "choco", "conemuc", "msbuild", "subl", "sh"
   Write-Host
 
   function global:prompt()
