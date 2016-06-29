@@ -3,7 +3,6 @@ Set-StrictMode -version latest
 $profileDirectory = Split-Path $profile
 $env:path = $env:path + ";$profileDirectory"
 
-Set-Location $profileDirectory
 
 $env:path = $env:path + ";$profileDirectory\Scripts"
 $env:path = $env:path + ";C:\tools\ec2-api-tools-1.7.5.1\bin"
@@ -76,6 +75,6 @@ Import-Module EC2
 Import-Module GitHelper
 Import-Module Gulp
 
-dark
+# dark
 
 
