@@ -59,3 +59,4 @@ Set-Alias restart Restart-Machine
 Set-Alias less Show-Content
 Set-Alias ts Get-Task
 Set-Alias prs Get-PullRequest
+Set-Alias pester Invoke-Pester
