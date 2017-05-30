@@ -44,3 +44,4 @@ Set-Alias sync Sync-PSProfile
 Set-Alias rdp Connect-Machine
 Set-Alias restart Restart-Machine
 Set-Alias less Show-Content
+Set-Alias pester Invoke-Pester
