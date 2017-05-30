@@ -1,5 +1,4 @@
-Import-Module C:\tools\poshgit\dahlbyk-posh-git-fadc4dd\posh-git
-
+Import-Module 'C:\tools\poshgit\dahlbyk-posh-git-*\profile.example.ps1'
 Import-Module ConEmu
 Import-Module -force PSProfile
 Import-Module SublimeText
@@ -72,4 +71,3 @@ Import-Module SublimeText
     " "
   }
 }
-
