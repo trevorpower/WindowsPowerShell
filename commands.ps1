@@ -58,10 +58,23 @@ function global:Get-Task(){
 }
 
 function global:Get-PullRequest(){
-   (irm "https://tfs.kneat.org/tfs/DefaultCollection/_apis/git/repositories" -UseDefaultCredentials).value.id |
+   @(irm "https://tfs.kneat.org/tfs/DefaultCollection/_apis/git/repositories" -UseDefaultCredentials).value.id |
    %{
-       (irm "https://tfs.kneat.org/tfs/DefaultCollection/_apis/git/repositories/{$_}/pullRequests"  -UseDefaultCredentials).value |
-       Select @{Name="ID"; Expression = {$_.pullRequestId}}, @{Name="Repo"; Expression = {$_.repository.name}}, title
+       (irm "https://tfs.kneat.org/tfs/DefaultCollection/_apis/git/repositories/{$_}/pullRequests"  -UseDefaultCredentials).value
+   }   |
+   Group-Object {$_.repository.name} |
+   %{
+       Write-Host "Repository: " -foregroundcolor "gray" -NoNewline
+       Write-Host $_.Name -foregroundcolor "white"
+       Write-Host
+       $_.Group | %{
+           $_.reviewers | ?{ $_.uniqueName -eq "KNEATORG\trevor.power" } |
+           %{ Write-Host $_.vote }
+           Write-Host "$($_.pullRequestId)  $($_.title)" -foregroundcolor "white"
+           Write-Host $_.url -foregroundcolor "cyan"
+           Write-Host $_.sourceRefName.Substring(11) -> $_.targetRefName.Substring(11) -foregroundcolor "darkgray"
+           Write-Host
+       }
    }
 }
 
