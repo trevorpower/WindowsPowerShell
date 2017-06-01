@@ -16,7 +16,7 @@ function printCommandStatus([System.Collections.ArrayList]$names) {
 
 function global:Show-TerminalStatus(){
     good "PS $($PSVersionTable.PSVersion)"
-    printCommandStatus "tf", "git", "nuget", "npm", "choco", "conemuc", "msbuild", "subl", "sh"
+    printCommandStatus "tf", "git", "nuget", "npm", "choco", "conemuc", "msbuild", "subl", "sh", "nunit"
     write-host
 }
 

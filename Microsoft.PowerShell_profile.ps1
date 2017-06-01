@@ -28,25 +28,6 @@ $MaximumHistoryCount = 200
     $env:PATH += ";$vs"
   }
 
-  function good($value) {
-    write-host " $value " -foregroundcolor "Black"  -backgroundcolor "DarkGreen" -nonewline
-  }
-  function bad($value) {
-    write-host " $value " -foregroundcolor "Black"  -backgroundcolor "DarkRed" -nonewline    
-  }
-  function sep() {
-    write-host " " -nonewline
-  }
-  function printCommandStatus([System.Collections.ArrayList]$names) {
-    Get-Command $names -CommandType Application -ErrorAction Silent |
-    %{ $_.Name.Split(".")[0].ToLower() } |
-    %{ $names.remove($_); sep; good $_ }
-    $names | %{ sep; bad $_ }
-  }
-  good "PS $($PSVersionTable.PSVersion)"
-  printCommandStatus "tf", "git", "nuget", "npm", "choco", "conemuc", "msbuild", "subl", "sh", "nunit"
-  Write-Host
-
   function global:prompt()
   {
     $principal = [Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()
