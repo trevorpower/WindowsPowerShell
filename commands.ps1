@@ -19,7 +19,10 @@ function global:Stop-ProcessByName($name){
 }
 
 function global:Connect-Machine($name){
-   if (-Not $name) {
+   if ([IPAddress]::TryParse($name, [ref]$null)){
+      mstsc /v:$name
+   }
+   elseif (-Not $name) {
       Get-ChildItem ~/.rdp | %{ $_.BaseName }
    }
    else {
