@@ -6,7 +6,6 @@ Import-Module SublimeText
 . "$PSScriptRoot\colors.ps1"
 . "$PSScriptRoot\commands.ps1"
 
-
 &{
   $console = $host.UI.RawUI
   $buffer = $console.BufferSize
