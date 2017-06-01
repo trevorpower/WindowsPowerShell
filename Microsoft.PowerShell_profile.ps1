@@ -7,6 +7,11 @@ Import-Module MyGit
 . "$PSScriptRoot\colors.ps1"
 . "$PSScriptRoot\commands.ps1"
 
+$nunitBin = "${env:ProgramFiles(x86)}\Nunit 2.6.4\bin\"
+if (test-path($nunitBin)) {
+  $env:PATH += ";$nunitBin"
+}
+
 &{
   $console = $host.UI.RawUI
   $buffer = $console.BufferSize
@@ -37,7 +42,7 @@ Import-Module MyGit
     $names | %{ sep; bad $_ }
   }
   good "PS $($PSVersionTable.PSVersion)"
-  printCommandStatus "tf", "git", "nuget", "npm", "choco", "conemuc", "msbuild", "subl", "sh"
+  printCommandStatus "tf", "git", "nuget", "npm", "choco", "conemuc", "msbuild", "subl", "sh", "nunit"
   Write-Host
 
   function global:prompt()
