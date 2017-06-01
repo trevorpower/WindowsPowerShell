@@ -2,6 +2,7 @@ Import-Module 'C:\tools\poshgit\dahlbyk-posh-git-*\profile.example.ps1'
 Import-Module ConEmu
 Import-Module -force PSProfile
 Import-Module SublimeText
+Import-Module MyGit
 
 . "$PSScriptRoot\colors.ps1"
 . "$PSScriptRoot\commands.ps1"
@@ -20,10 +21,24 @@ Import-Module SublimeText
     $env:PATH += ";$vs"
   }
 
-  $gitBin = "${env:ProgramFiles}\Git\bin\"
-  if (test-path($gitBin)) {
-    $env:PATH += ";$gitBin"
+  function good($value) {
+    write-host " $value " -foregroundcolor "Black"  -backgroundcolor "DarkGreen" -nonewline
   }
+  function bad($value) {
+    write-host " $value " -foregroundcolor "Black"  -backgroundcolor "DarkRed" -nonewline    
+  }
+  function sep() {
+    write-host " " -nonewline
+  }
+  function printCommandStatus([System.Collections.ArrayList]$names) {
+    Get-Command $names -CommandType Application -ErrorAction Silent |
+    %{ $_.Name.Split(".")[0].ToLower() } |
+    %{ $names.remove($_); sep; good $_ }
+    $names | %{ sep; bad $_ }
+  }
+  good "PS $($PSVersionTable.PSVersion)"
+  printCommandStatus "tf", "git", "nuget", "npm", "choco", "conemuc", "msbuild", "subl", "sh"
+  Write-Host
 
   function global:prompt()
   {
