@@ -38,6 +38,20 @@ function global:Show-Content($file){
    sh -c "less $file"
 }
 
+function global:Start-Timer($minutes = 5, $message = "Times Up!"){
+   $timer = New-Object System.Timers.Timer
+   $timer.Interval = $minutes * 60 * 1000
+   $timer.AutoReset = $false
+
+   $action = {
+      Write-Host
+      Write-Host -foregroundcolor magenta "   ###    $($Event.MessageData)    ###"
+   }
+
+   Register-ObjectEvent -InputObject $timer -MessageData $message -EventName Elapsed -Action $action > $null
+
+   $timer.Start()
+}
 
 function global:Get-Task(){
    tfpt query "git1601/My Queries/My Tasks" /collection:https://tfs.kneat.org/tfs/DefaultCollection /include:data
@@ -60,6 +74,7 @@ Set-Alias sync Sync-PSProfile
 Set-Alias rdp Connect-Machine
 Set-Alias restart Restart-Machine
 Set-Alias less Show-Content
+Set-Alias tea Start-Timer
 Set-Alias ts Get-Task
 Set-Alias prs Get-PullRequest
 Set-Alias pester Invoke-Pester
