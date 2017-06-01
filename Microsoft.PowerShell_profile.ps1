@@ -20,6 +20,8 @@ if (test-path($nunitBin)) {
   $console.BufferSize = $buffer
 }
 
+$MaximumHistoryCount = 200
+
 &{
   $vs = "${env:ProgramFiles(x86)}\Microsoft Visual Studio 14.0\Common7\IDE"
   if (test-path($vs)) {
