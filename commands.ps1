@@ -1,60 +1,60 @@
 function global:Pop-Directory(){
-   Set-Location ..
+  Set-Location ..
 }
 
 function global:Reset-Directory(){
-   Set-Location ~
+  Set-Location ~
 }
 
 function global:Find-Aliases($definition){
-   Get-Alias -Definition *$definition*
+  Get-Alias -Definition *$definition*
 }
 
 function global:Stop-ProcessByName($name){
-   Stop-Process -Name $name
+  Stop-Process -Name $name
 }
 
 function global:Stop-ProcessByName($name){
-   Stop-Process -Name $name
+  Stop-Process -Name $name
 }
 
 function global:Connect-Machine($name){
-   if ([IPAddress]::TryParse($name, [ref]$null)){
-      mstsc /v:$name
-   }
-   elseif (-Not $name) {
-      Get-ChildItem ~/.rdp | %{ $_.BaseName }
-   }
-   else {
-      mstsc (Get-Item "~/.rdp/$name.rdp").Fullname
-   }
+  if ([IPAddress]::TryParse($name, [ref]$null)){
+    mstsc /v:$name
+  }
+  elseif (-Not $name) {
+    Get-ChildItem ~/.rdp | %{ $_.BaseName }
+  }
+  else {
+    mstsc (Get-Item "~/.rdp/$name.rdp").Fullname
+  }
 }
 
 function global:Restart-Machine(){
-   shutdown /r /t 00
+  shutdown /r /t 00
 }
 
 function global:Show-Content($file){
-   sh -c "less $file"
+  sh -c "less $file"
 }
 
 function global:Start-Timer($minutes = 5, $message = "Times Up!"){
-   $timer = New-Object System.Timers.Timer
-   $timer.Interval = $minutes * 60 * 1000
-   $timer.AutoReset = $false
+  $timer = New-Object System.Timers.Timer
+  $timer.Interval = $minutes * 60 * 1000
+  $timer.AutoReset = $false
 
-   $action = {
-      Write-Host
-      Write-Host -foregroundcolor magenta "   ###    $($Event.MessageData)    ###"
-   }
+  $action = {
+    Write-Host
+    Write-Host -foregroundcolor magenta "   ###    $($Event.MessageData)    ###"
+  }
 
-   Register-ObjectEvent -InputObject $timer -MessageData $message -EventName Elapsed -Action $action > $null
+  Register-ObjectEvent -InputObject $timer -MessageData $message -EventName Elapsed -Action $action > $null
 
-   $timer.Start()
+  $timer.Start()
 }
 
 function global:Get-Task(){
-   tfpt query "git1601/My Queries/My Tasks" /collection:https://tfs.kneat.org/tfs/DefaultCollection /include:data
+  tfpt query "git1601/My Queries/My Tasks" /collection:https://tfs.kneat.org/tfs/DefaultCollection /include:data
 }
 
 function Write-PrVote($vote){
