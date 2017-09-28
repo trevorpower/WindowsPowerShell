@@ -3,6 +3,7 @@ Import-Module ConEmu
 Import-Module -force PSProfile
 Import-Module SublimeText
 Import-Module MyGit
+Import-Module PullRequests
 
 . "$PSScriptRoot\colors.ps1"
 . "$PSScriptRoot\commands.ps1"
