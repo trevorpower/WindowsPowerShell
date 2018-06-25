@@ -8,9 +8,4 @@
    {
       conemuc /GUIMACRO palette 3 "<Solarized Light>" > $null
    }
-   
-   function global:orange()
-   {
-      conemuc /GUIMACRO palette 3 "Orange" > $null
-   }
 }

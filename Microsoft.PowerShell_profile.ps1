@@ -1,17 +1,13 @@
-Import-Module 'C:\tools\poshgit\dahlbyk-posh-git-*\profile.example.ps1'
+Import-Module Posh-Git
 Import-Module ConEmu
 Import-Module -force PSProfile
 Import-Module SublimeText
 Import-Module MyGit
+Import-Module WebDev
 Import-Module PullRequests
 
 . "$PSScriptRoot\colors.ps1"
 . "$PSScriptRoot\commands.ps1"
-
-$nunitBin = "${env:ProgramFiles(x86)}\Nunit 2.6.4\bin\"
-if (test-path($nunitBin)) {
-  $env:PATH += ";$nunitBin"
-}
 
 &{
   $console = $host.UI.RawUI
@@ -24,11 +20,6 @@ if (test-path($nunitBin)) {
 $MaximumHistoryCount = 200
 
 &{
-  $vs = "${env:ProgramFiles(x86)}\Microsoft Visual Studio 14.0\Common7\IDE"
-  if (test-path($vs)) {
-    $env:PATH += ";$vs"
-  }
-
   function global:prompt()
   {
     $principal = [Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()
