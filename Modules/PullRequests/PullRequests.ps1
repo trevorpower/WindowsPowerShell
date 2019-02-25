@@ -19,6 +19,7 @@ function Write-Pr($pr){
    $repo = $pr.repository.name
    $project = $pr.repository.project.name
    $url = Get-TfsPrUrl($pr)
+   $currentUser = "$($env:UserDomain)\$($env:UserName)"
    Write-HeadingOne "$id | $($pr.title)"
    Write-Host "$project`:$repo"
    Write-Host -nonewline "$($pr.sourceRefName.Substring(11)) -> "
@@ -32,7 +33,12 @@ function Write-Pr($pr){
    Write-HeadingTwo "Votes"
    $pr.reviewers | %{
       Write-TfsPrVote($_.vote)
-      Write-Host " $($_.displayName)"
+      if ($currentUser -eq $_.uniqueName) {
+         Write-Host -ForegroundColor "White" " $($_.displayName)"
+      }
+      else {
+         Write-Host " $($_.displayName)"
+      }
    }
 }
 
