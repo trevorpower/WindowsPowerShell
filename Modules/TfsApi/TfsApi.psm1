@@ -11,14 +11,43 @@ function Get-TfsPullRequest{
          ValueFromPipeline=$true,
          ValueFromPipelineByPropertyName=$true)
       ]
-      [String[]]$RepositoryId
+      [String[]]$Id,
+      [Parameter(
+         Position=1,
+         Mandatory=$false,
+         ValueFromPipeline=$false,
+         ValueFromPipelineByPropertyName=$true)
+      ]
+      [String[]]$Name
    )
 
+   begin {
+      Write-Progress -Activity "Getting PRs" -Status "0% Complete:" -PercentComplete 0;
+      $repositories = @()
+   }
+
    process {
-      foreach($id in $RepositoryId)
+      $repositories += $Id;
+
+      if ($null -eq $Name)
       {
-         (irm "https://tfs.kneat.org/tfs/DefaultCollection/_apis/git/repositories/{$id}/pullRequests"  -UseDefaultCredentials).value
+         $Name = $Id;
       }
+
+      $names += $Name;
+      $Name = $null;
+   }
+
+   end {
+
+      Write-Progress -Activity "Fetching PRs" -PercentComplete 0;
+      for ($counter=0; $counter -lt $repositories.Length;){
+         (irm "https://tfs.kneat.org/tfs/DefaultCollection/_apis/git/repositories/{$($repositories[$counter])}/pullRequests"  -UseDefaultCredentials).value
+         $percent = (++$counter / $repositories.Length) * 100;
+         Write-Progress -Activity "Getting PRs" -PercentComplete $percent -CurrentOperation $names[$counter]
+      }
+
+      Write-Progress -Activity "Getting PRs" -Completed
    }
 }
 

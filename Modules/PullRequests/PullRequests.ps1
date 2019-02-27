@@ -1,20 +1,20 @@
-function Write-HeadingOne ($heading)
-{
+function Write-HeadingOne ($heading) {
    Write-Host -ForegroundColor "White" $heading
    Write-Host -ForegroundColor "White" ("=" * $heading.length)
 }
 
-function Write-HeadingTwo ($heading)
-{
+function Write-HeadingTwo ($heading) {
    Write-Host $heading
    Write-Host ("-" * $heading.length)
 }
 
 function Fetch-PullRequests {
-   return $script:repos | Get-TfsPullRequest | Sort-Object pullRequestId
+   return $script:repos |
+      Get-TfsPullRequest |
+      Sort-Object pullRequestId
 }
 
-function Write-Pr($pr){
+function Write-Pr($pr) {
    $id = $pr.pullRequestId
    $repo = $pr.repository.name
    $project = $pr.repository.project.name
@@ -30,16 +30,24 @@ function Write-Pr($pr){
    Write-Host $pr.description
    Write-Host
    Write-HeadingTwo "Votes"
-   $pr.reviewers | %{
+   $pr.reviewers | % {
       Write-TfsPrVote($_.vote)
       Write-Host " $($_.displayName)"
    }
 }
 
-function Read-PrCommand()
-{
+function Read-PrCommand() {
+   function ifShift($key, $shift, $noShift) { 
+      if ($key.ControlKeyState -band [Management.Automation.Host.ControlKeyStates]::ShiftPressed) {
+         $shift
+      }
+      else {
+         $noShift
+      }
+   }
+   
    $key = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
-   switch($key.VirtualKeyCode) {
+   switch ($key.VirtualKeyCode) {
       17 { 'none' }
       37 { 'prev' }
       38 { 'prev' }
@@ -47,20 +55,21 @@ function Read-PrCommand()
       40 { 'next' }
       40 { 'next' }
       default {
-         switch($key.Character) {
+         switch ($key.Character) {
             '' {'none'}
             'c' { 'checkout' }
-            'k' { 'prev' }
+            'k' { ifShift $key 'prev-unapproved' 'prev' }
+            'j' { ifShift $key 'next-unapproved' 'next' }
             'q' { 'quit' }
             'r' { 'reload' }
             '?' { 'help' }
             'h' { 'help' }
             default {
-             'next'
-          }
-       }
-    }
- }
+               'next'
+            }
+         }
+      }
+   }
 }
 
 <#
@@ -94,22 +103,35 @@ function Read-PrCommand()
 function Get-PullRequest(
    # force the fetch of repositories
    [switch]$force
-){
-   $idCol = @{Label="ID"; Expression={$_.pullRequestId}}
-   $repo = @{Label="Repository"; Expression={$_.repository.name};}
-   $branch = @{Label="Target Branch"; Expression={$_.targetRefName.Substring(11)}; Width=20}
-   $title = @{Label="Title"; Expression={$_.title}}
-   $creator = @{Label="Creator"; Expression={$_.createdBy.DisplayName}}
+) {
+   $idCol = @{Label = "ID"; Expression = {$_.pullRequestId}}
+   $repo = @{Label = "Repository"; Expression = {$_.repository.name}; }
+   $branch = @{Label = "Target Branch"; Expression = {$_.targetRefName.Substring(11)}; Width = 20}
+   $title = @{Label = "Title"; Expression = {$_.title}}
+   $creator = @{Label = "Creator"; Expression = {$_.createdBy.DisplayName}}
+   $currentUser = "$($env:UserDomain)\$($env:UserName)"
 
    $current = 0
    $stop = $false
    $show = $true
 
-   if(!$script:repos -Or $force)
-   {
+   $isNotApproved = [Predicate[object]] {
+
+      $approved = $false
+      Foreach ($reviewer in $args[0].reviewers) {
+         if ($currentUser -eq $reviewer.uniqueName -and $reviewer.vote -eq 10) {
+            $approved = $true
+            break
+         }
+      }
+
+      !$approved
+   }
+
+   if (!$script:repos -Or $force) {
       Write-Host "initialising repo list for first time use"
       try {
-         $script:repos = (Get-TfsRepository).id
+         $script:repos = (Get-TfsRepository | Select-Object Id, Name)
       }
       catch {
          $stop = $true
@@ -118,21 +140,19 @@ function Get-PullRequest(
       }
    }
 
-   if (!$stop)
-   {
+   if (!$stop) {
       $prs = Fetch-PullRequests
    }
 
-   while(!$stop)
-   {
-      if($show) {
+   while (!$stop) {
+      if ($show) {
          cls
          Write-Pr $prs[$current]
          $show = $false
          Write-Host -NoNewLine "$($current + 1)/$($prs.length):"
       }
 
-      switch(Read-PrCommand) {
+      switch (Read-PrCommand) {
          'quit' {
             $stop = $true
             Write-Host
@@ -142,13 +162,15 @@ function Get-PullRequest(
             Write-Host " h : show this help"
             Write-Host " q : quit"
             Write-Host " r : reload - update all request all PRs and show first"
-            Write-Host " j : show next PR"
-            Write-Host " k : show previous PR"
+            Write-Host " j : go-to next PR"
+            Write-Host " k : go-to previous PR"
+            Write-Host " J : go-to next un-approved PR"
+            Write-Host " K : go-to previous un-approved PR"
             Write-Host " c : checkout branch in current directory"
             Write-Host -NoNewLine ":"
          }
          'next' {
-            if ($current -lt $prs.length - 1){
+            if ($current -lt $prs.length - 1) {
                $current++;
                $show = $true
             }
@@ -157,12 +179,39 @@ function Get-PullRequest(
             }
          }
          'prev' {
-            if ($current -gt 0){
+            if ($current -gt 0) {
                $current--;
                $show = $true
             }
             else {
                Write-Host -NoNewLine "`rAt First PR :"
+            }
+         }
+         'next-unapproved' {
+            $foundIndex = [array]::FindIndex($prs[($current + 1)..$prs.length], $isNotApproved)
+            
+            if ($foundIndex -ne - 1) {
+               $current += ($foundIndex + 1);
+               $show = $true
+            }
+            else {
+               Write-Host -NoNewLine "`rNo more unapproved :"
+            }
+         }
+         'prev-unapproved' {
+            if ($current -eq 0) {
+               Write-Host -NoNewLine "`rAt First PR :"
+            }
+            else {
+               $foundIndex = [array]::FindLastIndex($prs[0..($current - 1)], $isNotApproved)
+            
+               if ($foundIndex -ne - 1) {
+                  $current = $foundIndex;
+                  $show = $true
+               }
+               else {
+                  Write-Host -NoNewLine "`rNo more unapproved :"
+               }
             }
          }
          'checkout' {
