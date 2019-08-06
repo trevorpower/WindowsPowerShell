@@ -1,4 +1,4 @@
-Import-Module 'C:\tools\poshgit\dahlbyk-posh-git-*\profile.example.ps1'
+Import-Module posh-git
 Import-Module ConEmu
 Import-Module -force PSProfile
 Import-Module SublimeText
